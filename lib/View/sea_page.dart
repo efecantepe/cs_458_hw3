@@ -78,8 +78,11 @@ class _SeaPageState extends State<SeaPage> {
 
   }
 
-Future<Map<String, dynamic>> readJsonObject() async {
-  final String response = await rootBundle.loadString('assets/data.json');
+Future<Map<String, dynamic>> readJsonObject(String filename) async {
+
+  print(filename);
+
+  final String response = await rootBundle.loadString('assets/${filename}.json');
   return json.decode(response);
 }
 
@@ -95,49 +98,52 @@ double calculateDistance(lat1, lon1, lat2, lon2){
 
 Future<void> findNearestPoint() async {
 
-  Map<String, dynamic> data = await readJsonObject();
+  Map<String, dynamic> marmaraData = await readJsonObject("marmara");
+  //Map<String, dynamic> medData = await readJsonObject("med");
+  Map<String, dynamic> blackSeaData = await readJsonObject("blackSea");
+  Map<String, dynamic> egeData = await readJsonObject("ege");
 
-  List<dynamic> features = data['features'];
+  print("EGE ENTERED");
+  List<double> ege = getNearByRegion(egeData);
+  //List<double> med = getNearByRegion(marmaraData);
+  print("MARMARA ENTERED");
+  List<double> marmara = getNearByRegion(marmaraData);
+  
+  print("BLACKSEA");
+  List<double> blackSea = getNearByRegion(blackSeaData);
 
-  print(features[0]['geometry']['coordinates'][0].length);
+  double nearLat = ege[0];
+  double nearLng = ege[1];
+  double nearDistance = ege[2];
+  String seaName = "Mediterranean sea";
 
-  /*
-      36.792676, 32.650176
-  */
+  // if(med[2] < nearDistance){
+  //   nearLat = med[0];
+  //   nearLng = med[1];
+  //   nearDistance = med[2];
+  //   seaName = "Mediterranean sea";
+  // }
 
+  print(nearDistance);
+  print(marmara[2]);
+  print(blackSea[2]);
 
-  double lat = 36.792676;
-  double lng = 32.650176;
-
-  double nearestLat = double.maxFinite;
-  double nearestLng = double.maxFinite;
-  double nearestDistance = double.maxFinite;
-
-
-  for( List<dynamic> coorList in features[0]['geometry']['coordinates'][0]){
-
-    for (List<dynamic> coorPairs in coorList){
-      
-
-      // TODO MIGHT BE PROBLEMATIC
-      double tempLng = coorPairs[0];
-      double tempLat = coorPairs[1];
-     
-
-      double tempDistance = calculateDistance(lat, lng, tempLat, tempLng);
-
-      if(tempDistance < nearestDistance){
-        nearestDistance = tempDistance;
-        nearestLat = tempLat;
-        nearestLng = tempLng;
-      } 
-    }
+  if(marmara[2] < nearDistance){
+    nearLat = marmara[0];
+    nearLng = marmara[1];
+    nearDistance = marmara[2];
+    seaName = "Marmara sea";
   }
 
-  print(nearestDistance);
-  print(nearestLat);
-  print(nearestLng);
+  if(blackSea[2] < nearDistance){
+    nearLat = blackSea[0];
+    nearLng = blackSea[1];
+    nearDistance = blackSea[2];
+    seaName = "Black sea";
+  }
 
+  print(seaName);
+  
   // 41.283059, 31.004389
 
   try{
@@ -149,8 +155,65 @@ Future<void> findNearestPoint() async {
     debugPrint(e.toString());
   }
 
+}
 
-}   
+List<double> getNearByRegion(Map<String, dynamic> region) {
+
+  // Ordu 40.730032, 37.546185
+  double lat = 40.730032;
+  double lng = 37.546185;
+  
+  // Karaman
+  // double lat = 36.792676;
+  // double lng = 32.650176;
+
+  double nearestLat = double.maxFinite;
+  double nearestLng = double.maxFinite;
+  double nearestDistance = double.maxFinite;
+
+  List<dynamic> features = region['features'];
+  
+  for( List<dynamic> coorList in features[0]['geometry']['coordinates'][0]){
+
+    for (List<dynamic> coorPairs in coorList){
+      
+
+      // TODO MIGHT BE PROBLEMATIC
+      
+      // debugPrint(coorPairs[0].runtimeType.toString());
+      // debugPrint(coorPairs[1].runtimeType.toString());      
+
+
+      
+      double? tempLng;
+      double? tempLat;
+
+      if (coorPairs[0] is int) {
+        tempLng = (coorPairs[0] as int).toDouble();
+      } else if (coorPairs[0] is double) {
+        tempLng = coorPairs[0];
+      }
+
+      if (coorPairs[1] is int) {
+        tempLat = (coorPairs[1] as int).toDouble();
+      } else if (coorPairs[1] is double) {
+        tempLat = coorPairs[1];
+      }
+     
+
+      double tempDistance = calculateDistance(lat, lng, tempLat, tempLng);
+
+      if(tempDistance < nearestDistance){
+        nearestDistance = tempDistance;
+        nearestLat = tempLat!;
+        nearestLng = tempLng!;
+      } 
+    }
+  }
+
+  return [nearestLat, nearestLng, nearestDistance]; 
+
+}
 
   
 

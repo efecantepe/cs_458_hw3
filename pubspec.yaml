@@ -63,6 +63,10 @@ flutter:
     - assets/user.json
     - assets/data.json
     - assets/coast.json
+    - assets/blackSea.json
+    - assets/ege.json
+    - assets/marmara.json
+    - assets/med.json
 
 
   # The following line ensures that the Material Icons font is
