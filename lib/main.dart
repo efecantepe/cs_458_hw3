@@ -1,5 +1,6 @@
 import 'package:cs_458_project3/View/login.dart';
 import 'package:cs_458_project3/View/sea_page.dart';
+import 'package:cs_458_project3/View/sun_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,11 +19,12 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       
-      initialRoute: '/seePage',
+      initialRoute: '/sunPage',
 
       routes: {
         '/' :(context) => Login(),
-        '/seePage': (context) => SeaPage()
+        '/seaPage': (context) => SeaPage(),
+        '/sunPage': (context) => SunPage()
       },
       
     );

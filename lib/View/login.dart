@@ -45,7 +45,7 @@ class Login extends StatelessWidget {
           User().phoneNumber = user['phone'];
 
           if(!context.mounted) return;
-          Navigator.pushNamed(context, "/seePage");
+          Navigator.pushNamed(context, "/seaPage");
         }
 
       }

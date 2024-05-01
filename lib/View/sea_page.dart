@@ -19,9 +19,7 @@ class SeaPage extends StatefulWidget{
 
 class _SeaPageState extends State<SeaPage> {
 
-  String? _currentAddress;
-  Position? _currentPosition;
-  String? _nearestSea;
+ 
 
    Future<bool> _handleLocationPermission() async {
     
@@ -98,18 +96,18 @@ double calculateDistance(lat1, lon1, lat2, lon2){
 
 Future<void> findNearestPoint() async {
 
+  await _getCurrentPosition();
+
   Map<String, dynamic> marmaraData = await readJsonObject("marmara");
   //Map<String, dynamic> medData = await readJsonObject("med");
   Map<String, dynamic> blackSeaData = await readJsonObject("blackSea");
   Map<String, dynamic> egeData = await readJsonObject("ege");
 
-  print("EGE ENTERED");
   List<double> ege = getNearByRegion(egeData);
   //List<double> med = getNearByRegion(marmaraData);
-  print("MARMARA ENTERED");
+  
   List<double> marmara = getNearByRegion(marmaraData);
   
-  print("BLACKSEA");
   List<double> blackSea = getNearByRegion(blackSeaData);
 
   double nearLat = ege[0];
@@ -142,26 +140,21 @@ Future<void> findNearestPoint() async {
     seaName = "Black sea";
   }
 
-  print(seaName);
+  setState(() {
+    _nearestSea = seaName;
+    _nearestSeaKm = nearDistance;
+  });
   
   // 41.283059, 31.004389
 
-  try{
-      List<Placemark> placemarks = await placemarkFromCoordinates(41.283059, 31.004389);
-
-      debugPrint(placemarks[0].toString());
-
-  }catch(e){
-    debugPrint(e.toString());
-  }
 
 }
 
 List<double> getNearByRegion(Map<String, dynamic> region) {
 
   // Ordu 40.730032, 37.546185
-  double lat = 40.730032;
-  double lng = 37.546185;
+  double lat = _currentPosition!.latitude;
+  double lng = _currentPosition!.longitude;
   
   // Karaman
   // double lat = 36.792676;
@@ -215,16 +208,35 @@ List<double> getNearByRegion(Map<String, dynamic> region) {
 
 }
 
-  
 
+  Position? _currentPosition;
+  String? _nearestSea;
+  double? _nearestSeaKm;
+
+  
   @override
   Widget build(BuildContext context){
 
-    findNearestPoint();
 
 
      return Scaffold(
-       appBar: AppBar(title: const Text("Location Page")),
+       appBar: AppBar(
+        title: const Text("Near Sea Page"),
+        actions: <Widget>[
+
+          ElevatedButton(
+            onPressed: () => {
+              Navigator.pushNamed(context, "/sunPage")
+
+            }, 
+            child: Text("Go To Sun Page")
+          )
+
+        ],
+        
+        
+      ),
+       
        body: SafeArea(
          child: Center(
            child: Column(
@@ -232,11 +244,12 @@ List<double> getNearByRegion(Map<String, dynamic> region) {
             children: [
               Text('LAT: ${_currentPosition?.latitude ?? ""}'),
               Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-              Text('ADDRESS: ${_currentAddress ?? ""}'),
+              Text('Nearest Sea: ${_nearestSea ?? ""}'),
+              Text('Distance in Kilometers: ${_nearestSeaKm ?? ""}'),
               const SizedBox(height: 32),
               ElevatedButton(
-                onPressed: _getCurrentPosition,
-                child: const Text("Get Current Location"),
+                onPressed: findNearestPoint,
+                child: const Text("Get Nearest Sea"),
               )
             ],
           ),
