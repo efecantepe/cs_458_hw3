@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'dart:math';
 
 
+import 'package:cs_458_project3/baseUrl.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:postgres/legacy.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:http/http.dart' as http;
+
 
 
 class SeaPage extends StatefulWidget{
@@ -18,8 +21,6 @@ class SeaPage extends StatefulWidget{
 }
 
 class _SeaPageState extends State<SeaPage> {
-
- 
 
    Future<bool> _handleLocationPermission() async {
     
@@ -147,6 +148,22 @@ Future<void> findNearestPoint() async {
   
   // 41.283059, 31.004389
 
+  var response = await http.post(
+
+  Uri.http("localhost:3000", "/sea"),
+   headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Access-Control-Allow-Origin': '*', // Add this header
+      },
+    body: jsonEncode(<String, dynamic>{
+      'nearLat' : nearLat,
+      'nearLng' : nearLng,
+      'nearDistance' : _nearestSeaKm,
+      'nearSea' : _nearestSea,
+    })
+  );
+
+  debugPrint("${response.statusCode}");
 
 }
 

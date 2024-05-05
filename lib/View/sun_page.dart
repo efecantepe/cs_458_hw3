@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sweph/sweph.dart';
 import 'dart:math';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 
 
@@ -44,6 +47,22 @@ class _SunPageState extends State<SunPage> {
 
     double result = computeDistance(earthPosition.longitude, earthPosition.latitude, sunPosition.longitude, sunPosition.latitude);
     print(result);
+
+
+     var response = await http.post(
+
+    Uri.http("localhost:3000", "/sun"),
+    headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Access-Control-Allow-Origin': '*', // Add this header
+        },
+      body: jsonEncode(<String, dynamic>{
+        'distance' : result,
+      })
+  );
+  debugPrint("${response.statusCode}");
+
+
   } 
 
   

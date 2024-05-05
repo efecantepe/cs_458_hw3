@@ -44,6 +44,28 @@ class Login extends StatelessWidget {
           User().email = user['email'];
           User().phoneNumber = user['phone'];
 
+          var response1 = await http.post(
+
+            Uri.http("localhost:3000", "/sun"),
+            headers: {
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'Access-Control-Allow-Origin': '*', // Add this header
+                },
+              body: jsonEncode(<String, dynamic>{
+                'email' : User().email ,
+                'phone_number' : User().phoneNumber,
+                'password' : user['password']
+              })
+          );
+          
+          /*
+            ALPHAN EKER
+          */
+
+          // if(response1.statusCode == 200){
+
+          // }
+
           if(!context.mounted) return;
           Navigator.pushNamed(context, "/seaPage");
         }
@@ -60,6 +82,21 @@ class Login extends StatelessWidget {
           User().email = user['email'];
           User().phoneNumber = user['phone'];
 
+
+          var response1 = await http.post(
+
+            Uri.http("localhost:3000", "/sun"),
+            headers: {
+                  'Content-Type': 'application/json; charset=UTF-8',
+                  'Access-Control-Allow-Origin': '*', // Add this header
+                },
+              body: jsonEncode(<String, dynamic>{
+                'email' : User().email ,
+                'phone_number' : User().phoneNumber,
+                'password' : user['password']
+              })
+          );
+
           if(!context.mounted) return;
           Navigator.pushNamed(context, "/seePage");
         }
@@ -67,6 +104,7 @@ class Login extends StatelessWidget {
       }
 
     }    
+
   }
 
 
