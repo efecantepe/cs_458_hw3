@@ -169,15 +169,7 @@ List<double> getNearByRegion(Map<String, dynamic> region) {
   for( List<dynamic> coorList in features[0]['geometry']['coordinates'][0]){
 
     for (List<dynamic> coorPairs in coorList){
-      
-
-      // TODO MIGHT BE PROBLEMATIC
-      
-      // debugPrint(coorPairs[0].runtimeType.toString());
-      // debugPrint(coorPairs[1].runtimeType.toString());      
-
-
-      
+       
       double? tempLng;
       double? tempLat;
 
