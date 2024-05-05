@@ -77,6 +77,15 @@ app.post('/loginPhoneNumber', async (req, res) => {
   }
 });
 
+app.post('/login', async (req, res) => {
+  console.log(req.body)
+});
+app.post('/sun', async (req, res) => {
+  console.log(req.body)
+});
+app.post('/sea', async (req, res) => {
+  console.log(req.body)
+});
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
