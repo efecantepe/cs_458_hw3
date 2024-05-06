@@ -15,25 +15,25 @@ final TextEditingController _passwordController = TextEditingController();
 
 class Login extends StatelessWidget {
 
-  bool isValidPhone(String phoneNumber){
+  static bool isValidPhone(String phoneNumber){
     RegExp regex = RegExp(r'^\d{10}$');
     return regex.hasMatch(phoneNumber);
   }
 
-  bool isValidEmail(String email){
+  static bool isValidEmail(String email){
     RegExp emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return emailRegExp.hasMatch(email);
   }
 
  
 
-  Future<void> handleLogin(String emailPhoneNumber, String password, BuildContext context) async{
+  static Future<void> handleLogin(String emailPhoneNumber, String password, BuildContext context) async{
 
     
     final String response = await rootBundle.loadString('assets/user.json');
     Map<String, dynamic> data = await json.decode(response);
     
-  List<Map<String, dynamic>> users = (data['users'] as List<dynamic>).cast<Map<String, dynamic>>();
+    List<Map<String, dynamic>> users = (data['users'] as List<dynamic>).cast<Map<String, dynamic>>();
     
 
     if(isValidPhone(emailPhoneNumber)){
