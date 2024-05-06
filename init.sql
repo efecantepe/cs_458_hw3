@@ -8,9 +8,7 @@ CREATE TABLE client (
 );
 
 INSERT INTO client(email, phone_number, password) VALUES (
-
-    "efecantepe@gmail.com",
-    "5432305782",
-    "123456789"
-
+    'efecantepe@gmail.com',
+    '5432305782',
+    '123456789'
 );

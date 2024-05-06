@@ -12,8 +12,21 @@ import 'package:flutter/services.dart' show rootBundle;
 final TextEditingController _emailController = TextEditingController();
 final TextEditingController _passwordController = TextEditingController();
 
+class LoginActions {
+  void onLoginFailed(String error) {
+    // Implement your error handling logic here
+    print("Login failed: $error");
+  }
+
+  void onLoginSuccessful() {
+    // Implement your error handling logic here
+    print("Login successful");
+  }
+}
 
 class Login extends StatelessWidget {
+
+  static LoginActions actions = LoginActions();
 
   static bool isValidPhone(String phoneNumber){
     RegExp regex = RegExp(r'^\d{10}$');
@@ -28,84 +41,85 @@ class Login extends StatelessWidget {
  
 
   static Future<void> handleLogin(String emailPhoneNumber, String password, BuildContext context) async{
-
-    
-    final String response = await rootBundle.loadString('assets/user.json');
-    Map<String, dynamic> data = await json.decode(response);
-    
-    List<Map<String, dynamic>> users = (data['users'] as List<dynamic>).cast<Map<String, dynamic>>();
-    
-
+    // PhoneNo Login
     if(isValidPhone(emailPhoneNumber)){
       
-       for (Map<String, dynamic> user in users) {
-        
-        if(emailPhoneNumber == user['phone'] && user['password'] == password){
-          User().email = user['email'];
-          User().phoneNumber = user['phone'];
+      User().phoneNumber = emailPhoneNumber;
 
-          var response1 = await http.post(
+      var response1 = await http.post(
 
-            Uri.http("localhost:3000", "/sun"),
-            headers: {
-                  'Content-Type': 'application/json; charset=UTF-8',
-                  'Access-Control-Allow-Origin': '*', // Add this header
-                },
-              body: jsonEncode(<String, dynamic>{
-                'email' : User().email ,
-                'phone_number' : User().phoneNumber,
-                'password' : user['password']
-              })
-          );
-          
-          /*
-            ALPHAN EKER
-          */
-
-          // if(response1.statusCode == 200){
-
-          // }
-
-          if(!context.mounted) return;
-          Navigator.pushNamed(context, "/seaPage");
-        }
-
+        Uri.http("localhost:3000", "/loginPhoneNumber"),
+        headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Access-Control-Allow-Origin': '*', // Add this header
+            },
+          body: jsonEncode(<String, dynamic>{
+            'phone_number' : User().phoneNumber,
+            'password' : password
+          })
+      );
+      bool successfulLogin = false;
+      if(response1.statusCode == 200){
+        var decodedResponse = jsonDecode(response1.body);
+        // Access the 'message' key, which contains an array of items
+        List<dynamic> messages = decodedResponse['message'];
+        String email = messages[0]['email'];
+        User().email = email;
+        print(User().email);
+        successfulLogin = true;
+        actions.onLoginSuccessful();
       }
 
+      else{
+        actions.onLoginFailed("invalid cred.");
+      }
+      if(!context.mounted) return;
+      if(successfulLogin){
+        Navigator.pushNamed(context, "/seaPage");
+      }
+        
     }
 
-    else if (isValidEmail(emailPhoneNumber)) {
+    // Email Login
+    else if(isValidEmail(emailPhoneNumber)){
+      
+      User().email = emailPhoneNumber;
 
-      for (Map<String, dynamic> user in users) {
-        
-        if(emailPhoneNumber == user['email'] && user['password'] == password){
-          User().email = user['email'];
-          User().phoneNumber = user['phone'];
+      var response1 = await http.post(
 
-
-          var response1 = await http.post(
-
-            Uri.http("localhost:3000", "/sun"),
-            headers: {
-                  'Content-Type': 'application/json; charset=UTF-8',
-                  'Access-Control-Allow-Origin': '*', // Add this header
-                },
-              body: jsonEncode(<String, dynamic>{
-                'email' : User().email ,
-                'phone_number' : User().phoneNumber,
-                'password' : user['password']
-              })
-          );
-
-          if(!context.mounted) return;
-          Navigator.pushNamed(context, "/seePage");
-        }
-
+        Uri.http("localhost:3000", "/loginEmail"),
+        headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Access-Control-Allow-Origin': '*', // Add this header
+            },
+          body: jsonEncode(<String, dynamic>{
+            'email' : User().email ,
+            'password' : password
+          })
+      );
+      bool successfulLogin = false;
+      if(response1.statusCode == 200){
+        var decodedResponse = jsonDecode(response1.body);
+        // Access the 'message' key, which contains an array of items
+        List<dynamic> messages = decodedResponse['message'];
+        String pno = messages[0]['phone_number'];
+        User().phoneNumber = pno;
+        successfulLogin = true;
+        print(User().phoneNumber);
+        actions.onLoginSuccessful();
       }
-
-    }    
+      else{
+        actions.onLoginFailed("invalid cred.");
+      }
+      if(!context.mounted) return;
+      if(successfulLogin){
+        Navigator.pushNamed(context, "/seaPage");
+      }
+        
+    }
 
   }
+
 
 
   const Login({super.key});

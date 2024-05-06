@@ -41,4 +41,23 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-node_modules
+
+# Node modules
+node_modules/
+
+# Dart/Flutter packages
+.dart_tool/
+.packages
+
+# Lock files might be excluded in library projects but included in application projects
+# pubspec.lock  
+
+# IDE specific files
+.idea/
+*.iml
+.DS_Store
+.vscode/
+
+# OS generated files
+Thumbs.db
+
