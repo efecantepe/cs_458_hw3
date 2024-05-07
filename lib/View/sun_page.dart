@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 
-
+final TextEditingController latitudeController = TextEditingController();
+final TextEditingController longitudeController = TextEditingController();
 
 class SunPage extends StatefulWidget {
   @override
@@ -13,9 +14,10 @@ class SunPage extends StatefulWidget {
 }
 
 class _SunPageState extends State<SunPage> {
-  TextEditingController latitudeController = TextEditingController();
-  TextEditingController longitudeController = TextEditingController();
+  
   TextEditingController distanceController = TextEditingController();
+
+  double _distance = 0; 
 
 
   Future<void> calculateDistance() async{
@@ -37,16 +39,25 @@ class _SunPageState extends State<SunPage> {
     SwephFlag.SEFLG_SWIEPH | SwephFlag.SEFLG_SPEED,
   );
 
+    debugPrint(latitudeController.text);
+    debugPrint(longitudeController.text);
 
+    double earthPosLong = earthPosition.longitude;
+    double earthPosLat = earthPosition.latitude;
 
-    print(earthPosition.latitude);
-    print(earthPosition.longitude);
+    if(latitudeController.text.isNotEmpty && longitudeController.text.isNotEmpty){
+      earthPosLong = double.parse(longitudeController.text);
+      earthPosLat = double.parse(latitudeController.text);
+    }
 
-    print(sunPosition.latitude);
-    print(sunPosition.longitude);
+    
 
-    double result = computeDistance(earthPosition.longitude, earthPosition.latitude, sunPosition.longitude, sunPosition.latitude);
+    double result = computeDistance(earthPosLong, earthPosLat, sunPosition.longitude, sunPosition.latitude);
     print(result);
+
+     setState(() {
+      _distance = result;
+     });
 
 
      var response = await http.post(
@@ -62,6 +73,8 @@ class _SunPageState extends State<SunPage> {
   );
   debugPrint("${response.statusCode}");
 
+
+ 
 
   } 
 
@@ -157,7 +170,7 @@ class _SunPageState extends State<SunPage> {
             ),
             SizedBox(height: 20),
             Text(
-              'Distance: ${distanceController.text}',
+              'Distance: ${_distance}',
               style: TextStyle(fontSize: 20),
             ),
           ],
