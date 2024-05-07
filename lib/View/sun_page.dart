@@ -10,14 +10,14 @@ final TextEditingController longitudeController = TextEditingController();
 
 class SunPage extends StatefulWidget {
   @override
-  _SunPageState createState() => _SunPageState();
+  SunPageState createState() => SunPageState();
 }
 
-class _SunPageState extends State<SunPage> {
+class SunPageState extends State<SunPage> {
   
   TextEditingController distanceController = TextEditingController();
 
-  double _distance = 0; 
+  double distance = 0; 
 
 
   Future<void> calculateDistance() async{
@@ -56,7 +56,7 @@ class _SunPageState extends State<SunPage> {
     print(result);
 
      setState(() {
-      _distance = result;
+      distance = result;
      });
 
 
@@ -82,10 +82,10 @@ class _SunPageState extends State<SunPage> {
   double computeDistance(double earthLon, double earthLat, double sunLon, double sunLat) {
     const double earthRadius = 149597870.7; // Mean distance from Earth to Sun in kilometers (1 Astronomical Unit - AU)
     // Convert degrees to radians
-    double lon1Radians = _degreesToRadians(earthLon);
-    double lat1Radians = _degreesToRadians(earthLat);
-    double lon2Radians = _degreesToRadians(sunLon);
-    double lat2Radians = _degreesToRadians(sunLat);
+    double lon1Radians = degreesToRadians(earthLon);
+    double lat1Radians = degreesToRadians(earthLat);
+    double lon2Radians = degreesToRadians(sunLon);
+    double lat2Radians = degreesToRadians(sunLat);
     // Haversine formula
     double dlon = lon2Radians - lon1Radians;
     double dlat = lat2Radians - lat1Radians;
@@ -96,7 +96,7 @@ class _SunPageState extends State<SunPage> {
     return distance;
   }
 
-  double _degreesToRadians(double degrees) {
+  double degreesToRadians(double degrees) {
     return degrees * pi / 180;
   }
 
@@ -170,7 +170,7 @@ class _SunPageState extends State<SunPage> {
             ),
             SizedBox(height: 20),
             Text(
-              'Distance: ${_distance}',
+              'Distance: ${distance}',
               style: TextStyle(fontSize: 20),
             ),
           ],

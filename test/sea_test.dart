@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:cs_458_project3/View/login.dart';
 import 'package:cs_458_project3/View/sea_page.dart';
-import 'package:cs_458_project3/View/sun_page.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
