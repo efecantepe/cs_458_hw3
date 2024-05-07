@@ -67,34 +67,6 @@ void main() {
         // Build the SeaPage widget
         await tester.pumpWidget(MaterialApp(home: SeaPage()));
 
-        // Add tests specific to the SeaPage
-        final Finder mapWidget = find.byType(SeaPage);  // Assuming you have a MapWidget, replace with your actual widget
-        expect(mapWidget, findsOneWidget);
-
-        // Additional checks for other elements
-        // For example, test text visibility, button locations, etc.
-
-        // Reset the screen size after each test
-        tester.binding.window.clearPhysicalSizeTestValue();
-      }
-    });
-  });
-
-  group('Sea Page Responsiveness', () {
-    testWidgets('Ensure all widgets are visible and properly aligned on various screen sizes', (WidgetTester tester) async {
-      var screenSizes = [
-        Size(320, 568),  // Small phone
-        Size(411, 731),  // Average phone
-        Size(1024, 768), // Tablet
-      ];
-
-      for (var screenSize in screenSizes) {
-        tester.binding.window.physicalSizeTestValue = screenSize;
-        tester.binding.window.devicePixelRatioTestValue = 1.0;
-
-        // Build the SeaPage widget
-        await tester.pumpWidget(MaterialApp(home: SeaPage()));
-
         // Verify key elements are found
         expect(find.text('Get Nearest Sea'), findsOneWidget);  // Checks for button presence
         expect(find.byType(ElevatedButton), findsWidgets);  // Checks if there are any elevated buttons
