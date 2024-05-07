@@ -29,6 +29,7 @@ client.connect()
 
 
 app.post('/loginEmail', async (req, res) => {
+  console.log("loginEmail called");
   const { email, password } = req.body;
   try {
     const query = 'SELECT email, phone_number FROM client WHERE email = $1 AND password = $2';
@@ -47,13 +48,11 @@ app.post('/loginEmail', async (req, res) => {
 
 app.post('/loginPhoneNumber', async (req, res) => {
 
-    console.log(req.body)
+    console.log("loginPhoneNumber Called")
 
     const phoneNumber = String(req.body.phone_number);
     const password = String(req.body.password)
 
-
-    console.log("Phone Number is " + phoneNumber)
 
   try {
     const query = 'SELECT email, phone_number FROM client WHERE phone_number = $1 AND password = $2';
