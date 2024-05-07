@@ -20,7 +20,7 @@ const client = new Client({
   host: 'localhost',
   database: 'cs458',
   password: 'password',
-  port: 6543,
+  port: 6530,
 });
 
 client.connect()
