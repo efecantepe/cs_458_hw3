@@ -8,6 +8,8 @@ import 'dart:convert';
 final TextEditingController latitudeController = TextEditingController();
 final TextEditingController longitudeController = TextEditingController();
 
+ double SUN_CORE = 40000000;
+
 class SunPage extends StatefulWidget {
   @override
   SunPageState createState() => SunPageState();
@@ -18,7 +20,6 @@ class SunPageState extends State<SunPage> {
   TextEditingController distanceController = TextEditingController();
 
   double distance = 0; 
-
 
   Future<void> calculateDistance() async{
 
@@ -68,13 +69,11 @@ class SunPageState extends State<SunPage> {
           'Access-Control-Allow-Origin': '*', // Add this header
         },
       body: jsonEncode(<String, dynamic>{
-        'distance' : result,
+        'distance' : result + SUN_CORE,
       })
   );
   debugPrint("${response.statusCode}");
 
-
- 
 
   } 
 
@@ -99,10 +98,6 @@ class SunPageState extends State<SunPage> {
   double degreesToRadians(double degrees) {
     return degrees * pi / 180;
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +165,7 @@ class SunPageState extends State<SunPage> {
             ),
             SizedBox(height: 20),
             Text(
-              'Distance: ${distance}',
+              'Distance: ${distance + SUN_CORE}',
               style: TextStyle(fontSize: 20),
             ),
           ],
