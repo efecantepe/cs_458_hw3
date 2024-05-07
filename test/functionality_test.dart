@@ -61,5 +61,29 @@ void main() {
 
       expect(find.text('Location permissions are permanently denied, we cannot request permissions.'), findsOneWidget);
     });
+
+    testWidgets('_getCurrentPosition fetches and displays location', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: SeaPage()));
+
+      // Tap the 'Get Nearest Sea' button which should trigger _getCurrentPosition
+      await tester.tap(find.text('Get Nearest Sea'));
+      await tester.pumpAndSettle();  // Wait for all animations and async calls to complete.
+
+      // Check if the latitude and longitude are displayed
+      expect(find.textContaining('LAT:'), findsOneWidget);
+      expect(find.textContaining('LNG:'), findsOneWidget);
+    });
+
+    testWidgets('_getNearestSea fetches and displays nearest sea', (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: SeaPage()));
+
+      // Tap the 'Get Nearest Sea' button which should trigger _getNearestSea
+      await tester.tap(find.text('Get Nearest Sea'));
+      await tester.pumpAndSettle();  // Wait for all animations and async calls to complete.
+
+      // Check if the latitude and longitude are displayed
+      expect(find.textContaining('Nearest Sea:'), findsOneWidget);
+      expect(find.textContaining('Distance in Kilometers:'), findsOneWidget);
+    });
   });
 }
