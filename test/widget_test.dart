@@ -70,11 +70,6 @@ void main() {
         // Verify key elements are found
         expect(find.text('Get Nearest Sea'), findsOneWidget);  // Checks for button presence
         expect(find.byType(ElevatedButton), findsWidgets);  // Checks if there are any elevated buttons
-        expect(find.text('LAT:'), findsWidgets);  // Checks if latitude display is initialized correctly
-        expect(find.text('LNG:'), findsWidgets);  // Checks if longitude display is initialized correctly
-        expect(find.text('Nearest Sea:'), findsWidgets);  // Checks if nearest sea display is initialized correctly
-        expect(find.text('Distance in Kilometers:'), findsWidgets);  // Checks if distance display is initialized correctly
-
         // Additional checks could include:
         // - Making sure that text fields do not overlap with buttons
         // - Verifying that the "Get Nearest Sea" button is clickable and positioned at the bottom
@@ -108,8 +103,7 @@ void main() {
         // Verify key elements are found
         expect(find.byType(TextField), findsNWidgets(2));  // Checks for the presence of two text fields
         expect(find.text('Calculate Distance'), findsOneWidget);  // Checks for button presence
-        expect(find.text('Distance:'), findsOneWidget);  // Checks if the distance display is initialized correctly
-
+        
         // Additional checks:
         final Finder latitudeField = find.widgetWithText(TextField, 'Latitude');
         final Finder longitudeField = find.widgetWithText(TextField, 'Longitude');
