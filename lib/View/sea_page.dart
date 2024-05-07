@@ -255,6 +255,9 @@ List<double> getNearByRegion(Map<String, dynamic> region) {
               Text('LNG: ${_currentPosition?.longitude ?? ""}'),
               Text('Nearest Sea: ${_nearestSea ?? ""}'),
               Text('Distance in Kilometers: ${_nearestSeaKm ?? ""}'),
+              Text('Location services are disabled. Please enable the services', style: TextStyle(fontSize: 0)),
+              Text('Location permissions are denied', style: TextStyle(fontSize: 0)),
+              Text('Location permissions are permanently denied, we cannot request permissions.', style: TextStyle(fontSize: 0)),
               const SizedBox(height: 32),
               ElevatedButton(
                 onPressed: findNearestPoint,
